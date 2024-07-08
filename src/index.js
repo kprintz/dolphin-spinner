@@ -1,7 +1,7 @@
 class Spinner {
 
   settings = {};
-  names = ['kat', 'dex', 'jack', 'henry'];
+  names = [];
   namesEl;
   buttonEl;
   inputEl;
@@ -30,12 +30,15 @@ class Spinner {
       namesArr.push(nameEl);
     })
     this.namesEl.replaceChildren(...namesArr);
-    this.inputEl.reset();
+    //this.inputEl.reset();
   }
 
-  addName() {
+  addName(event) {
+    event.preventDefault();
+    let form = document.querySelector('.input-container');
     this.names.push(document.getElementById('name-input').value);
     this.updateNamesDisplay();
+    form.reset();
   }
 
   updateName(idx) {
