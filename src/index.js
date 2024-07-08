@@ -3,7 +3,8 @@ class Spinner {
   settings = {};
   names = [];
   namesEl;
-  buttonEl;
+  addButtonEl;
+  clearButtonEl;
   inputEl;
   selectedNameIdx = 0;
   inputPlaceholderText = 'Input name here...';
@@ -16,8 +17,10 @@ class Spinner {
     this.namesEl = document.querySelector('.names');
     this.inputEl = document.querySelector('.name-input');
     this.updateNamesDisplay();
-    this.buttonEl = document.querySelector('.add-button');
-    this.buttonEl.addEventListener("click", this.addName.bind(this));
+    this.addButtonEl = document.querySelector('.add-button');
+    this.addButtonEl.addEventListener("click", this.addName.bind(this));
+    this.clearButtonEl = document.querySelector('.clear-button');
+    this.clearButtonEl.addEventListener("click", this.clearNames.bind(this));
     console.log('initialized');
   }
 
@@ -51,6 +54,7 @@ class Spinner {
 
   clearNames() {
     this.names = [];
+    this.updateNamesDisplay();
   }
 
   spin() {
