@@ -1,0 +1,52 @@
+.spinner-container {
+    width: 100vw;
+    margin-top: 100px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.spinner {
+    height: 400px;
+    width: 400px;
+    border-radius: 50%;
+    background-color: blue;
+}
+
+.input {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.input-container {
+    display: flex;
+}
+
+/* todo: no visible label for now */
+.input-header {
+    font-size: 12px;
+}
+
+.name-input {
+    border: none;
+    border-radius: 5px;
+    background-color: lightgrey;
+    padding: 8px;
+    font-weight: bold;
+    color: darkgray;
+}
+
+.names {
+    display: flex;
+    flex-direction: column;
+}
+
+.name {
+    background-color: lightgrey;
+    padding: 4px;
+    color: black;
+    margin-top: 10px;
+}
