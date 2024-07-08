@@ -3,7 +3,10 @@ class Spinner {
   settings = {};
   names = ['kat', 'dex', 'jack', 'henry'];
   namesEl;
+  buttonEl;
+  inputEl;
   selectedNameIdx = 0;
+  inputPlaceholderText = 'Input name here...';
 
   constructor() {
     this.init();
@@ -11,21 +14,28 @@ class Spinner {
 
   init() {
     this.namesEl = document.querySelector('.names');
-    this.names.forEach((name) => {
-      let nameEl = document.createElement("div");
-      let nameText = nameEl.createTextNode(name);
-      nameEl.appendChild(nameText);
-      this.namesEl.appendChild(nameEl);
-    })
+    this.inputEl = document.querySelector('.name-input');
+    this.updateNamesDisplay();
+    this.buttonEl = document.querySelector('.add-button');
+    this.buttonEl.addEventListener("click", this.addName.bind(this));
     console.log('initialized');
   }
 
-  addName(event) {
-    event.preventDefault();
-    let formData = new FormData(document.querySelector('.input-container'));
-    console.log(formData);
-    // this.names.push(event.target.value);
-    // console.log('added: ' + event.target.value);
+  updateNamesDisplay() {
+    let namesArr = [];
+    this.names.forEach((name) => {
+      let nameEl = document.createElement("div");
+      let nameText = document.createTextNode(name);
+      nameEl.appendChild(nameText);
+      namesArr.push(nameEl);
+    })
+    this.namesEl.replaceChildren(...namesArr);
+    this.inputEl.reset();
+  }
+
+  addName() {
+    this.names.push(document.getElementById('name-input').value);
+    this.updateNamesDisplay();
   }
 
   updateName(idx) {
