@@ -19,15 +19,16 @@ class Spinner {
     this.updateNamesDisplay();
     this.addButtonEl = document.querySelector('.add-button');
     this.addButtonEl.addEventListener("click", this.addName.bind(this));
+    this.inputEl.addEventListener("keypress", this.addName.bind(this));
     this.clearButtonEl = document.querySelector('.clear-button');
     this.clearButtonEl.addEventListener("click", this.clearNames.bind(this));
-    console.log('initialized');
   }
 
   updateNamesDisplay() {
     let namesArr = [];
     this.names.forEach((name) => {
       let nameEl = document.createElement("div");
+      nameEl.className = 'name';
       let nameText = document.createTextNode(name);
       nameEl.appendChild(nameText);
       namesArr.push(nameEl);
@@ -37,11 +38,13 @@ class Spinner {
   }
 
   addName(event) {
-    event.preventDefault();
-    let form = document.querySelector('.input-container');
-    this.names.push(document.getElementById('name-input').value);
-    this.updateNamesDisplay();
-    form.reset();
+    if (event.key === "Enter" || event.type === "click") {
+      event.preventDefault();
+      let form = document.querySelector('.input-container');
+      this.names.push(document.getElementById('name-input').value);
+      this.updateNamesDisplay();
+      form.reset();
+    }
   }
 
   updateName(idx) {

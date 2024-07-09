@@ -36,7 +36,7 @@
     background-color: lightgrey;
     padding: 8px;
     font-weight: bold;
-    color: darkgray;
+    margin-right: 8px;
 }
 
 .names {
@@ -49,4 +49,9 @@
     padding: 4px;
     color: black;
     margin-top: 10px;
+    border-radius: 5px;
+}
+
+.add-button {
+    margin-right: 8px;
 }
