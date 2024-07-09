@@ -1,11 +1,14 @@
 class Spinner {
 
   settings = {};
-  names = [];
+  names = ['a', 'b', 'c', 'd'];
   namesEl;
   addButtonEl;
   clearButtonEl;
+  spinButtonEl;
   inputEl;
+  selectedName;
+  errorMsg = '';
 
   constructor() {
     this.init();
@@ -15,11 +18,13 @@ class Spinner {
     this.namesEl = document.querySelector('.names');
     this.inputEl = document.querySelector('.name-input');
     this.updateNamesDisplay();
-    this.addButtonEl = document.querySelector('.add-button');
+    this.addButtonEl = document.querySelector('.add');
     this.addButtonEl.addEventListener("click", this.addName.bind(this));
     this.inputEl.addEventListener("keypress", this.addName.bind(this));
-    this.clearButtonEl = document.querySelector('.clear-button');
+    this.clearButtonEl = document.querySelector('.clear');
     this.clearButtonEl.addEventListener("click", this.clearNames.bind(this));
+    this.spinButtonEl = document.querySelector('.spin');
+    this.spinButtonEl.addEventListener("click", this.spin.bind(this));
   }
 
   updateNamesDisplay() {
@@ -75,7 +80,14 @@ class Spinner {
   }
 
   spin() {
-
+    // todo: currently no error messages are displayed on page; remove console logs
+    if (this.names.length) {
+      this.selectedName = this.names[Math.floor(Math.random() * this.names.length)];
+      console.log(this.selectedName);
+    } else {
+      this.errorMsg = 'Error: Add names to spin!';
+      console.log(this.errorMsg);
+    }
   }
 }
 
