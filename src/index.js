@@ -6,8 +6,6 @@ class Spinner {
   addButtonEl;
   clearButtonEl;
   inputEl;
-  selectedNameIdx = 0;
-  inputPlaceholderText = 'Input name here...';
 
   constructor() {
     this.init();
@@ -26,15 +24,16 @@ class Spinner {
 
   updateNamesDisplay() {
     let namesArr = [];
-    this.names.forEach((name) => {
+    this.names.forEach((name, nameIdx) => {
       let nameEl = document.createElement("div");
       nameEl.className = 'name';
+      nameEl.setAttribute("id", `${name}-${nameIdx}`);
       let nameText = document.createTextNode(name);
       nameEl.appendChild(nameText);
       namesArr.push(nameEl);
     })
     this.namesEl.replaceChildren(...namesArr);
-    //this.inputEl.reset();
+    this.addNameDeleteButtons();
   }
 
   addName(event) {
@@ -47,17 +46,32 @@ class Spinner {
     }
   }
 
-  updateName(idx) {
-
+  addNameDeleteButtons() {
+    this.names.forEach((name, nameIdx) => {
+      let deleteButtonEl = document.createElement("button");
+      deleteButtonEl.className = "delete-name";
+      deleteButtonEl.setAttribute("id", `delete-${nameIdx}`);
+      let deleteText = document.createTextNode('X');
+      deleteButtonEl.appendChild(deleteText);
+      deleteButtonEl.addEventListener("click", this.deleteName.bind(this, name));
+      let nameEl = document.getElementById(`${name}-${nameIdx}`);
+      nameEl.insertAdjacentElement('afterend', deleteButtonEl);
+    })
   }
 
-  removeName(idx) {
-
+  deleteName(deletedName) {
+    this.names = this.names.filter((name) => name !== deletedName);
+    this.updateNamesDisplay();
   }
 
   clearNames() {
     this.names = [];
     this.updateNamesDisplay();
+  }
+
+  // todo: allow name editing instead of requiring the name to be deleted and re-added in case of typos
+  updateName(idx, updatedName) {
+    this.names[idx] = updatedName;
   }
 
   spin() {
