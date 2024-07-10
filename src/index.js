@@ -1,7 +1,11 @@
 class Spinner {
 
   settings = {};
-  names = ['a', 'b', 'c', 'd'];
+  spinnerSize = 300;
+  spinnerCanvas;
+  spinnerContext;
+  spinnerSliceSize;
+  names = ['a', 'b', 'c'];
   namesEl;
   addButtonEl;
   clearButtonEl;
@@ -15,6 +19,9 @@ class Spinner {
   }
 
   init() {
+    // todo: add error handling as needed (missing canvas context)
+    this.spinnerCanvas = document.getElementById("spinner");
+    this.spinnerContext = this.spinnerCanvas.getContext("2d");
     this.namesEl = document.querySelector('.names');
     this.inputEl = document.querySelector('.name-input');
     this.updateNamesDisplay();
@@ -48,6 +55,8 @@ class Spinner {
       this.names.push(document.getElementById('name-input').value);
       this.updateNamesDisplay();
       form.reset();
+      this.spinnerSliceSize = this.names.length ? this.spinnerSize / (this.names.length * 0.5) : this.spinnerSize;
+      this.updateSpinner();
     }
   }
 
@@ -88,6 +97,27 @@ class Spinner {
       this.errorMsg = 'Error: Add names to spin!';
       console.log(this.errorMsg);
     }
+  }
+
+  updateSpinner() {
+    this.spinnerContext.clearRect(0, 0, this.spinnerCanvas.width, this.spinnerCanvas.height);
+    for (let i = 1; i <= this.names.length; i++) {
+      this.drawWedgeLines(250, 250, 250, i * (360 / this.names.length), "rgb(200 150 300)");
+    }
+  }
+
+  drawWedgeLines(x, y, length, angle, color) {
+    let radians = angle / 180 * Math.PI;
+    let endX = x + length * Math.cos(radians);
+    let endY = y - length * Math.sin(radians);
+    this.spinnerContext.save();
+    this.spinnerContext.fillStyle = color;
+    this.spinnerContext.strokeStyle = color;
+    this.spinnerContext.beginPath();
+    this.spinnerContext.moveTo(x, y)
+    this.spinnerContext.lineTo(endX, endY);
+    this.spinnerContext.closePath();
+    this.spinnerContext.stroke();
   }
 }
 
