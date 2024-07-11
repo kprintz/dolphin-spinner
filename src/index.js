@@ -1,11 +1,9 @@
 class Spinner {
 
   settings = {};
-  spinnerSize = 300;
   spinnerCanvas;
   spinnerContext;
-  spinnerSliceSize;
-  names = ['a', 'b', 'c'];
+  names = [];
   namesEl;
   addButtonEl;
   clearButtonEl;
@@ -55,7 +53,6 @@ class Spinner {
       this.names.push(document.getElementById('name-input').value);
       this.updateNamesDisplay();
       form.reset();
-      this.spinnerSliceSize = this.names.length ? this.spinnerSize / (this.names.length * 0.5) : this.spinnerSize;
       this.updateSpinner();
     }
   }
@@ -76,11 +73,13 @@ class Spinner {
   deleteName(deletedName) {
     this.names = this.names.filter((name) => name !== deletedName);
     this.updateNamesDisplay();
+    this.updateSpinner();
   }
 
   clearNames() {
     this.names = [];
     this.updateNamesDisplay();
+    this.updateSpinner();
   }
 
   // todo: allow name editing instead of requiring the name to be deleted and re-added in case of typos
@@ -101,8 +100,10 @@ class Spinner {
 
   updateSpinner() {
     this.spinnerContext.clearRect(0, 0, this.spinnerCanvas.width, this.spinnerCanvas.height);
-    for (let i = 1; i <= this.names.length; i++) {
+    for (let i = 0; i < this.names.length; i++) {
       this.drawWedgeLines(250, 250, 250, i * (360 / this.names.length), "rgb(200 150 300)");
+      // do same as above but rotate wheel by half the angle calculated above
+      this.drawNamesOnCanvas(250, 250, 150, i * (360 / this.names.length), "rgb(200 150 300)", 'test');
     }
   }
 
@@ -111,13 +112,22 @@ class Spinner {
     let endX = x + length * Math.cos(radians);
     let endY = y - length * Math.sin(radians);
     this.spinnerContext.save();
-    this.spinnerContext.fillStyle = color;
     this.spinnerContext.strokeStyle = color;
     this.spinnerContext.beginPath();
     this.spinnerContext.moveTo(x, y)
     this.spinnerContext.lineTo(endX, endY);
     this.spinnerContext.closePath();
     this.spinnerContext.stroke();
+  }
+
+  drawNamesOnCanvas(x, y, length, angle, color, name) {
+    let radians = (angle * 0.5) / 90 * Math.PI;
+    let endX = x + length * Math.cos(radians);
+    let endY = y - length * Math.sin(radians);
+    this.spinnerContext.save();
+    this.spinnerContext.fillStyle = color;
+    this.spinnerContext.font = "24px serif";
+    this.spinnerContext.fillText(name, endX, endY);
   }
 }
 
