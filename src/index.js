@@ -103,7 +103,7 @@ class Spinner {
     for (let i = 0; i < this.names.length; i++) {
       this.drawWedgeLines(250, 250, 250, i * (360 / this.names.length), "rgb(200 150 300)");
       // do same as above but rotate wheel by half the angle calculated above
-      this.drawNamesOnCanvas(250, 250, 150, i * (360 / this.names.length), "rgb(200 150 300)", 'test');
+      this.drawNamesOnCanvas(250, 250, 150, i * (360 / this.names.length), "rgb(200 150 300)", this.names[i]);
     }
   }
 
