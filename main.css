@@ -1,4 +1,4 @@
-.spinner-container {
+.container {
     width: 100vw;
     margin-top: 100px;
     display: flex;
@@ -6,9 +6,15 @@
     align-items: center;
 }
 
+.spinner-container {
+    position: relative;
+    height: 500px;
+    width: 500px;
+}
+
 .spinner {
     border-radius: 50%;
-    background-color: blue;
+    background-color: lightblue;
     box-shadow: 0 0 10px 5px grey;
 }
 
@@ -56,4 +62,25 @@
 
 .button {
     margin-right: 8px;
+}
+
+.dolphin {
+    position: absolute;
+    top: 42%;
+    left: 42%;
+    height: 80px;
+    width: 80px;
+}
+
+.rotate {
+    animation: spin 500ms infinite linear;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }

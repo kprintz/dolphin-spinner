@@ -1,6 +1,7 @@
 class Spinner {
 
   settings = {};
+  spinnerEl;
   spinnerCanvas;
   spinnerContext;
   names = [];
@@ -96,6 +97,9 @@ class Spinner {
       this.errorMsg = 'Error: Add names to spin!';
       console.log(this.errorMsg);
     }
+    // get angle size per player
+    // add together to get winner (+ 0.5 of a slice) to land in center
+    // transform by this summed angle
   }
 
   updateSpinner() {
@@ -103,7 +107,7 @@ class Spinner {
     for (let i = 0; i < this.names.length; i++) {
       this.drawWedgeLines(250, 250, 250, i * (360 / this.names.length), "rgb(200 150 300)");
       // do same as above but rotate wheel by half the angle calculated above
-      this.drawNamesOnCanvas(250, 250, 150, i * (360 / this.names.length), "rgb(200 150 300)", this.names[i]);
+      this.drawNamesOnCanvas(250, 250, 150, i * (360 / this.names.length) + ((360 / this.names.length) / 2), "rgb(200 150 300)", this.names[i]);
     }
   }
 
@@ -112,6 +116,7 @@ class Spinner {
     let endX = x + length * Math.cos(radians);
     let endY = y - length * Math.sin(radians);
     this.spinnerContext.save();
+    this.spinnerContext.lineWidth = 2;
     this.spinnerContext.strokeStyle = color;
     this.spinnerContext.beginPath();
     this.spinnerContext.moveTo(x, y)
@@ -121,7 +126,7 @@ class Spinner {
   }
 
   drawNamesOnCanvas(x, y, length, angle, color, name) {
-    let radians = (angle * 0.5) / 90 * Math.PI;
+    let radians = (angle / 2) / 90 * Math.PI;
     let endX = x + length * Math.cos(radians);
     let endY = y - length * Math.sin(radians);
     this.spinnerContext.save();
