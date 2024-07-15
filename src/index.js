@@ -15,7 +15,13 @@ class Spinner {
   errorMsg = '';
   mikeModeEl;
   mikeMode = false;
-  mikeModeRedemptionChance = 0.01;
+  palette = [
+    '#12264d',
+    '#86b3cb',
+    '#82d4ed',
+    '#3abae3',
+    '#0c77a8'
+  ]
 
   constructor() {
     this.init();
@@ -105,7 +111,7 @@ class Spinner {
   }
 
   reassignMike() {
-    let newMike = this.names[Math.floor(Math.random() * this.names.length)];
+    let newMike = this.names[this.getRandomNumber(this.names.length)];
     this.names.forEach((name, nameIdx) => {
       if (name.toLowerCase() === 'mike') {
         this.names[nameIdx] = newMike;
@@ -119,12 +125,12 @@ class Spinner {
     // todo: currently no error messages are displayed on page
     if (this.names.length) {
       if (this.mikeMode) {
-        if (Math.floor(Math.random() * 2) % 2 !== 0) {
+        if (this.getRandomNumber(2) % 2 !== 0) {
           this.reassignMike();
         }
       }
       this.winnerEl.textContent = '';
-      let randomNum = Math.floor(Math.random() * this.names.length)
+      let randomNum = this.getRandomNumber(this.names.length);
       this.selectedName = this.names[randomNum];
       this.spinnerEl = document.querySelector('.spinner');
       this.spinnerEl.classList.add('rotate');
@@ -145,8 +151,9 @@ class Spinner {
   updateSpinner() {
     this.spinnerContext.clearRect(0, 0, this.spinnerCanvas.width, this.spinnerCanvas.height);
     for (let i = 0; i < this.names.length; i++) {
-      this.drawWedgeLines(250, 250, 250, i * (360 / this.names.length), "rgb(85, 136, 255)");
-      this.drawNamesOnCanvas(250, 250, 200, i * (360 / this.names.length) + ((360 / this.names.length) / 2), "rgb(85, 136, 255)", this.names[i]);
+      let strokeColor = this.palette[this.getRandomNumber(5)];
+      this.drawWedgeLines(250, 250, 250, i * (360 / this.names.length), strokeColor);
+      this.drawNamesOnCanvas(250, 250, 200, i * (360 / this.names.length) + ((360 / this.names.length) / 2), strokeColor, this.names[i]);
     }
   }
 
@@ -155,7 +162,7 @@ class Spinner {
     let endX = x + length * Math.cos(radians);
     let endY = y - length * Math.sin(radians);
     this.spinnerContext.save();
-    this.spinnerContext.lineWidth = 2;
+    this.spinnerContext.lineWidth = 3;
     this.spinnerContext.strokeStyle = color;
     this.spinnerContext.beginPath();
     this.spinnerContext.moveTo(x, y)
@@ -172,6 +179,10 @@ class Spinner {
     this.spinnerContext.fillStyle = color;
     this.spinnerContext.font = "16px sans-serif";
     this.spinnerContext.fillText(name, endX, endY);
+  }
+
+  getRandomNumber(max) {
+    return Math.floor(Math.random() * max);
   }
 }
 
