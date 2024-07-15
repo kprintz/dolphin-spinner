@@ -10,6 +10,7 @@ class Spinner {
   clearButtonEl;
   spinButtonEl;
   inputEl;
+  winnerEl;
   selectedName;
   errorMsg = '';
 
@@ -23,6 +24,7 @@ class Spinner {
     this.spinnerContext = this.spinnerCanvas.getContext("2d");
     this.namesEl = document.querySelector('.names');
     this.inputEl = document.querySelector('.name-input');
+    this.winnerEl = document.querySelector('.winner');
     this.updateNamesDisplay();
     this.addButtonEl = document.querySelector('.add');
     this.addButtonEl.addEventListener("click", this.addName.bind(this));
@@ -91,15 +93,23 @@ class Spinner {
   spin() {
     // todo: currently no error messages are displayed on page; remove console logs
     if (this.names.length) {
-      this.selectedName = this.names[Math.floor(Math.random() * this.names.length)];
-      console.log(this.selectedName);
+      this.winnerEl.textContent = '';
+      let randomNum = Math.floor(Math.random() * this.names.length)
+      this.selectedName = this.names[randomNum];
+      this.spinnerEl = document.querySelector('.spinner');
+      this.spinnerEl.classList.add('rotate');
+      setTimeout(() => {
+        this.spinnerEl.classList.remove('rotate');
+        let wedgeAngle = 360 / this.names.length;
+        this.spinnerEl.style.transform = ('rotate(0deg)');
+        this.spinnerEl.style.transform = (`rotate(${wedgeAngle * randomNum}deg)`);
+        let winnerTxt = document.createTextNode(this.selectedName);
+        this.winnerEl.appendChild(winnerTxt);
+      }, 1000);
     } else {
       this.errorMsg = 'Error: Add names to spin!';
       console.log(this.errorMsg);
     }
-    // get angle size per player
-    // add together to get winner (+ 0.5 of a slice) to land in center
-    // transform by this summed angle
   }
 
   updateSpinner() {
@@ -126,7 +136,8 @@ class Spinner {
   }
 
   drawNamesOnCanvas(x, y, length, angle, color, name) {
-    let radians = (angle / 2) / 90 * Math.PI;
+    //let radians = (angle / 2) / 90 * Math.PI;
+    let radians = angle / 180 * Math.PI;
     let endX = x + length * Math.cos(radians);
     let endY = y - length * Math.sin(radians);
     this.spinnerContext.save();

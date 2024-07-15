@@ -64,12 +64,21 @@
     margin-right: 8px;
 }
 
+.winner {
+    height: 30px;
+    text-align: center;
+    border-top: 1px solid black;
+    padding-top: 20px;
+}
+
 .dolphin {
     position: absolute;
     top: 42%;
     left: 42%;
     height: 80px;
     width: 80px;
+    transform: rotate(-60deg);
+    transition: all 3s;
 }
 
 .rotate {
