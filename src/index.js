@@ -13,6 +13,8 @@ class Spinner {
   winnerEl;
   selectedName;
   errorMsg = '';
+  mikeModeEl;
+  mikeMode = false;
 
   constructor() {
     this.init();
@@ -31,8 +33,14 @@ class Spinner {
     this.inputEl.addEventListener("keypress", this.addName.bind(this));
     this.clearButtonEl = document.querySelector('.clear');
     this.clearButtonEl.addEventListener("click", this.clearNames.bind(this));
+    this.mikeModeEl = document.getElementById('mike-mode');
+    this.mikeModeEl.addEventListener("click", this.setMikeMode.bind(this));
     this.spinButtonEl = document.querySelector('.spin');
     this.spinButtonEl.addEventListener("click", this.spin.bind(this));
+  }
+
+  setMikeMode(event) {
+    this.mikeMode = event.target.checked;
   }
 
   updateNamesDisplay() {
@@ -54,6 +62,9 @@ class Spinner {
       event.preventDefault();
       let form = document.querySelector('.input-container');
       this.names.push(document.getElementById('name-input').value);
+      if (this.mikeMode) {
+        this.names.push('Mike');
+      }
       this.updateNamesDisplay();
       form.reset();
       this.updateSpinner();
@@ -116,7 +127,6 @@ class Spinner {
     this.spinnerContext.clearRect(0, 0, this.spinnerCanvas.width, this.spinnerCanvas.height);
     for (let i = 0; i < this.names.length; i++) {
       this.drawWedgeLines(250, 250, 250, i * (360 / this.names.length), "rgb(200 150 300)");
-      // do same as above but rotate wheel by half the angle calculated above
       this.drawNamesOnCanvas(250, 250, 150, i * (360 / this.names.length) + ((360 / this.names.length) / 2), "rgb(200 150 300)", this.names[i]);
     }
   }
@@ -136,13 +146,12 @@ class Spinner {
   }
 
   drawNamesOnCanvas(x, y, length, angle, color, name) {
-    //let radians = (angle / 2) / 90 * Math.PI;
     let radians = angle / 180 * Math.PI;
     let endX = x + length * Math.cos(radians);
     let endY = y - length * Math.sin(radians);
     this.spinnerContext.save();
     this.spinnerContext.fillStyle = color;
-    this.spinnerContext.font = "24px serif";
+    this.spinnerContext.font = "16px serif";
     this.spinnerContext.fillText(name, endX, endY);
   }
 }
