@@ -92,6 +92,7 @@ class Spinner {
 
   clearNames() {
     this.names = [];
+    this.winnerEl.textContent = '';
     this.updateNamesDisplay();
     this.updateSpinner();
   }
@@ -102,7 +103,7 @@ class Spinner {
   }
 
   spin() {
-    // todo: currently no error messages are displayed on page; remove console logs
+    // todo: currently no error messages are displayed on page
     if (this.names.length) {
       this.winnerEl.textContent = '';
       let randomNum = Math.floor(Math.random() * this.names.length)
@@ -127,7 +128,7 @@ class Spinner {
     this.spinnerContext.clearRect(0, 0, this.spinnerCanvas.width, this.spinnerCanvas.height);
     for (let i = 0; i < this.names.length; i++) {
       this.drawWedgeLines(250, 250, 250, i * (360 / this.names.length), "rgb(200 150 300)");
-      this.drawNamesOnCanvas(250, 250, 150, i * (360 / this.names.length) + ((360 / this.names.length) / 2), "rgb(200 150 300)", this.names[i]);
+      this.drawNamesOnCanvas(250, 250, 200, i * (360 / this.names.length) + ((360 / this.names.length) / 2), "rgb(200 150 300)", this.names[i]);
     }
   }
 
@@ -151,7 +152,7 @@ class Spinner {
     let endY = y - length * Math.sin(radians);
     this.spinnerContext.save();
     this.spinnerContext.fillStyle = color;
-    this.spinnerContext.font = "16px serif";
+    this.spinnerContext.font = "16px sans-serif";
     this.spinnerContext.fillText(name, endX, endY);
   }
 }
