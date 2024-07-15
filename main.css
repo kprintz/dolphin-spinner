@@ -14,8 +14,8 @@
 
 .spinner {
     border-radius: 50%;
-    background-color: lightblue;
-    box-shadow: 0 0 10px 5px grey;
+    background-color: #bbeeff;
+    box-shadow: 0 0 20px 2px #3366ff;
 }
 
 .input {

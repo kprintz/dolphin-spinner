@@ -127,8 +127,8 @@ class Spinner {
   updateSpinner() {
     this.spinnerContext.clearRect(0, 0, this.spinnerCanvas.width, this.spinnerCanvas.height);
     for (let i = 0; i < this.names.length; i++) {
-      this.drawWedgeLines(250, 250, 250, i * (360 / this.names.length), "rgb(200 150 300)");
-      this.drawNamesOnCanvas(250, 250, 200, i * (360 / this.names.length) + ((360 / this.names.length) / 2), "rgb(200 150 300)", this.names[i]);
+      this.drawWedgeLines(250, 250, 250, i * (360 / this.names.length), "rgb(85, 136, 255)");
+      this.drawNamesOnCanvas(250, 250, 200, i * (360 / this.names.length) + ((360 / this.names.length) / 2), "rgb(85, 136, 255)", this.names[i]);
     }
   }
 
