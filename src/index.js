@@ -15,6 +15,7 @@ class Spinner {
   errorMsg = '';
   mikeModeEl;
   mikeMode = false;
+  mikeModeRedemptionChance = 0.01;
 
   constructor() {
     this.init();
@@ -103,9 +104,25 @@ class Spinner {
     this.names[idx] = updatedName;
   }
 
+  reassignMike() {
+    let newMike = this.names[Math.floor(Math.random() * this.names.length)];
+    this.names.forEach((name, nameIdx) => {
+      if (name.toLowerCase() === 'mike') {
+        this.names[nameIdx] = newMike;
+      }
+    })
+    this.updateNamesDisplay();
+    this.updateSpinner();
+  }
+
   spin() {
     // todo: currently no error messages are displayed on page
     if (this.names.length) {
+      if (this.mikeMode) {
+        if (Math.floor(Math.random() * 2) % 2 !== 0) {
+          this.reassignMike();
+        }
+      }
       this.winnerEl.textContent = '';
       let randomNum = Math.floor(Math.random() * this.names.length)
       this.selectedName = this.names[randomNum];
