@@ -75,6 +75,7 @@ class Spinner {
     this.names.forEach((name, nameIdx) => {
       let deleteButtonEl = document.createElement("button");
       deleteButtonEl.className = "delete-name";
+      deleteButtonEl.classList.add('button');
       deleteButtonEl.setAttribute("id", `delete-${nameIdx}`);
       let deleteText = document.createTextNode('X');
       deleteButtonEl.appendChild(deleteText);

@@ -1,3 +1,9 @@
+:root {
+    color: white;
+    background-color: black;
+    overflow: hidden;
+}
+
 .container {
     width: 100vw;
     margin-top: 100px;
@@ -22,7 +28,7 @@
     display: flex;
     flex-direction: column;
     width: 500px;
-    border: 1px solid black;
+    border: 1px solid #3366ff;
     border-radius: 10px;
     padding: 20px;
 }
@@ -43,7 +49,7 @@
     flex: 1;
     border: none;
     border-radius: 5px;
-    background-color: lightgrey;
+    background-color: #bbeeff;
     padding: 8px;
     font-weight: bold;
     margin-right: 8px;
@@ -57,7 +63,7 @@
 }
 
 .name {
-    background-color: lightgrey;
+    background-color: #bbeeff;
     padding: 4px;
     color: black;
     margin-top: 10px;
@@ -66,12 +72,15 @@
 
 .button {
     margin-right: 8px;
+    background-color: #3366ff;
+    border-radius: 4px;
+    border: 2px solid #3366ff;
 }
 
 .winner {
     height: 30px;
     text-align: center;
-    border-top: 1px solid black;
+    border-top: 1px solid #bbeeff;
     padding-top: 20px;
 }
 
