@@ -16,12 +16,12 @@ class Spinner {
   mikeModeEl;
   mikeMode = false;
   palette = [
-    '#12264d',
-    '#86b3cb',
-    '#82d4ed',
-    '#3abae3',
-    '#0c77a8'
-  ]
+    '#94d0f2',
+    '#ddf1fc',
+    '#969eca',
+    '#f7efad',
+    '#ece87a'
+  ];
 
   constructor() {
     this.init();
@@ -31,6 +31,7 @@ class Spinner {
     // todo: add error handling as needed (missing canvas context)
     this.spinnerCanvas = document.getElementById("spinner");
     this.spinnerContext = this.spinnerCanvas.getContext("2d");
+    this.spinnerEl = document.querySelector('.spinner');
     this.namesEl = document.querySelector('.names');
     this.inputEl = document.querySelector('.name-input');
     this.winnerEl = document.querySelector('.winner');
@@ -53,12 +54,15 @@ class Spinner {
   updateNamesDisplay() {
     let namesArr = [];
     this.names.forEach((name, nameIdx) => {
+      let nameContainerEl = document.createElement("div");
+      nameContainerEl.className = 'name-container';
       let nameEl = document.createElement("div");
       nameEl.className = 'name';
       nameEl.setAttribute("id", `${name}-${nameIdx}`);
       let nameText = document.createTextNode(name);
       nameEl.appendChild(nameText);
-      namesArr.push(nameEl);
+      nameContainerEl.appendChild(nameEl);
+      namesArr.push(nameContainerEl);
     })
     this.namesEl.replaceChildren(...namesArr);
     this.addNameDeleteButtons();
@@ -83,8 +87,9 @@ class Spinner {
       let deleteButtonEl = document.createElement("button");
       deleteButtonEl.className = "delete-name";
       deleteButtonEl.classList.add('button');
+      deleteButtonEl.classList.add('delete-button');
       deleteButtonEl.setAttribute("id", `delete-${nameIdx}`);
-      let deleteText = document.createTextNode('X');
+      let deleteText = document.createTextNode('x');
       deleteButtonEl.appendChild(deleteText);
       deleteButtonEl.addEventListener("click", this.deleteName.bind(this, name));
       let nameEl = document.getElementById(`${name}-${nameIdx}`);
@@ -132,7 +137,6 @@ class Spinner {
       this.winnerEl.textContent = '';
       let randomNum = this.getRandomNumber(this.names.length);
       this.selectedName = this.names[randomNum];
-      this.spinnerEl = document.querySelector('.spinner');
       this.spinnerEl.classList.add('rotate');
       setTimeout(() => {
         this.spinnerEl.classList.remove('rotate');
@@ -149,9 +153,10 @@ class Spinner {
   }
 
   updateSpinner() {
+    this.spinnerEl.style.transform = ('rotate(0deg)');
     this.spinnerContext.clearRect(0, 0, this.spinnerCanvas.width, this.spinnerCanvas.height);
     for (let i = 0; i < this.names.length; i++) {
-      let strokeColor = this.palette[this.getRandomNumber(5)];
+      let strokeColor = this.palette[this.getRandomNumber(4)];
       this.drawWedgeLines(250, 250, 250, i * (360 / this.names.length), strokeColor);
       this.drawNamesOnCanvas(250, 250, 200, i * (360 / this.names.length) + ((360 / this.names.length) / 2), strokeColor, this.names[i]);
     }

@@ -20,16 +20,16 @@
 
 .spinner {
     border-radius: 50%;
-    background-color: #bbeeff;
-    box-shadow: 0 0 20px 2px #3366ff;
+    background-color: #12264d;
+    box-shadow: 0 0 20px 2px #0c77a8;
 }
 
 .input {
     display: flex;
     flex-direction: column;
     width: 500px;
-    border: 1px solid #3366ff;
-    border-radius: 10px;
+    border: 3px solid #0c77a8;
+    border-radius: 15px;
     padding: 20px;
 }
 
@@ -49,7 +49,8 @@
     flex: 1;
     border: none;
     border-radius: 5px;
-    background-color: #bbeeff;
+    background-color: #f7efad;
+    color: #969eca;
     padding: 8px;
     font-weight: bold;
     margin-right: 8px;
@@ -62,19 +63,33 @@
     overflow-y: auto;
 }
 
+.name-container {
+    display: flex;
+    align-items: baseline;
+}
+
 .name {
-    background-color: #bbeeff;
-    padding: 4px;
-    color: black;
+    flex: 1;
+    background-color: #94d0f2;
+    padding: 4px 8px;
+    color: #12264d;
     margin-top: 10px;
     border-radius: 5px;
+    font-weight: bold;
 }
 
 .button {
     margin-right: 8px;
-    background-color: #3366ff;
+    background-color: #12264d;
     border-radius: 4px;
-    border: 2px solid #3366ff;
+    border: 2px solid #12264d;
+    color: #94d0f2;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.delete-button {
+    margin-left: 8px;
 }
 
 .winner {
