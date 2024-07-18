@@ -99,6 +99,13 @@
     padding-top: 20px;
 }
 
+.confetti {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+}
+
 .dolphin {
     position: absolute;
     top: 42%;

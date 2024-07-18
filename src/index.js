@@ -22,6 +22,10 @@ class Spinner {
     '#f7efad',
     '#ece87a'
   ];
+  confettiLib = require('canvas-confetti');
+  confetti;
+  confettiCanvas;
+  confettiCanvasCtx;
 
   constructor() {
     this.init();
@@ -45,6 +49,9 @@ class Spinner {
     this.mikeModeEl.addEventListener("click", this.setMikeMode.bind(this));
     this.spinButtonEl = document.querySelector('.spin');
     this.spinButtonEl.addEventListener("click", this.spin.bind(this));
+    this.confettiCanvas = document.getElementById("confetti");
+    this.confettiCanvasCtx = this.confettiCanvas.getContext("2d");
+    this.confetti = this.confettiLib.create(this.confettiCanvas, { resize: true });
   }
 
   setMikeMode(event) {
@@ -145,6 +152,7 @@ class Spinner {
         this.spinnerEl.style.transform = (`rotate(${wedgeAngle * randomNum}deg)`);
         let winnerTxt = document.createTextNode(this.selectedName);
         this.winnerEl.appendChild(winnerTxt);
+        this.confetti();
       }, 1000);
     } else {
       this.errorMsg = 'Error: Add names to spin!';
