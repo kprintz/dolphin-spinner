@@ -13,8 +13,6 @@ class Spinner {
   winnerEl;
   selectedName;
   errorMsg = '';
-  mikeModeEl;
-  mikeMode = false;
   palette = [
     '#94d0f2',
     '#ddf1fc',
@@ -45,17 +43,11 @@ class Spinner {
     this.inputEl.addEventListener("keypress", this.addName.bind(this));
     this.clearButtonEl = document.querySelector('.clear');
     this.clearButtonEl.addEventListener("click", this.clearNames.bind(this));
-    this.mikeModeEl = document.getElementById('mike-mode');
-    this.mikeModeEl.addEventListener("click", this.setMikeMode.bind(this));
     this.spinButtonEl = document.querySelector('.spin');
     this.spinButtonEl.addEventListener("click", this.spin.bind(this));
     this.confettiCanvas = document.getElementById("confetti");
     this.confettiCanvasCtx = this.confettiCanvas.getContext("2d");
     this.confetti = this.confettiLib.create(this.confettiCanvas, { resize: true });
-  }
-
-  setMikeMode(event) {
-    this.mikeMode = event.target.checked;
   }
 
   updateNamesDisplay() {
@@ -80,9 +72,6 @@ class Spinner {
       event.preventDefault();
       let form = document.querySelector('.input-container');
       this.names.push(document.getElementById('name-input').value);
-      if (this.mikeMode) {
-        this.names.push('Mike');
-      }
       this.updateNamesDisplay();
       form.reset();
       this.updateSpinner();
@@ -136,11 +125,6 @@ class Spinner {
   spin() {
     // todo: currently no error messages are displayed on page
     if (this.names.length) {
-      if (this.mikeMode) {
-        if (this.getRandomNumber(2) % 2 !== 0) {
-          this.reassignMike();
-        }
-      }
       this.winnerEl.textContent = '';
       let randomNum = this.getRandomNumber(this.names.length);
       this.selectedName = this.names[randomNum];
