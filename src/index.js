@@ -1,5 +1,8 @@
 class Spinner {
 
+  // todo: link this to index.html
+  static CANVAS_SIZE = 500;
+
   settings = {
     showConfetti: true,
   };
@@ -193,33 +196,34 @@ class Spinner {
     this.spinnerContext.clearRect(0, 0, this.spinnerCanvas.width, this.spinnerCanvas.height);
     for (let i = 0; i < this.names.length; i++) {
       let strokeColor = this.palette[this.getRandomNumber(4)];
-      this.drawWedgeLines(250, 250, 250, i * (360 / this.names.length), strokeColor);
-      this.drawNamesOnCanvas(250, 250, 200, i * (360 / this.names.length) + ((360 / this.names.length) / 2), strokeColor, this.names[i]);
+      this.drawWedgeLines(i * (360 / this.names.length), strokeColor);
+      this.drawNamesOnCanvas(i * (360 / this.names.length) + ((360 / this.names.length) / 2), strokeColor, this.names[i]);
     }
   }
 
-  drawWedgeLines(x, y, length, angle, color) {
+  drawWedgeLines(angle, color) {
     let radians = angle / 180 * Math.PI;
-    let endX = x + length * Math.cos(radians);
-    let endY = y - length * Math.sin(radians);
+    let x = (Spinner.CANVAS_SIZE / 2) + (Spinner.CANVAS_SIZE / 2) * Math.cos(radians);
+    let y = (Spinner.CANVAS_SIZE / 2) - (Spinner.CANVAS_SIZE / 2) * Math.sin(radians);
     this.spinnerContext.save();
     this.spinnerContext.lineWidth = 3;
     this.spinnerContext.strokeStyle = color;
     this.spinnerContext.beginPath();
-    this.spinnerContext.moveTo(x, y)
-    this.spinnerContext.lineTo(endX, endY);
+    this.spinnerContext.moveTo(Spinner.CANVAS_SIZE / 2, Spinner.CANVAS_SIZE / 2)
+    this.spinnerContext.lineTo(x, y);
     this.spinnerContext.closePath();
     this.spinnerContext.stroke();
   }
 
-  drawNamesOnCanvas(x, y, length, angle, color, name) {
+  // todo: I think if I rotate the canvas as I draw the names and then reset after drawing each one, they will angle out instead of being horizontal
+  drawNamesOnCanvas(angle, color, name) {
     let radians = angle / 180 * Math.PI;
-    let endX = x + length * Math.cos(radians);
-    let endY = y - length * Math.sin(radians);
+    let x = (Spinner.CANVAS_SIZE / 2) + 100 * Math.cos(radians);
+    let y = (Spinner.CANVAS_SIZE / 2) - 100 * Math.sin(radians);
     this.spinnerContext.save();
     this.spinnerContext.fillStyle = color;
     this.spinnerContext.font = "16px sans-serif";
-    this.spinnerContext.fillText(name, endX, endY);
+    this.spinnerContext.fillText(name, x, y);
   }
 
   getRandomNumber(max) {
