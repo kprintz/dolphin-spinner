@@ -7,6 +7,7 @@
 </head>
 <body>
   <div class="container">
+    <button type="button" class="settings"></button>
     <div class="spinner-container">
       <canvas class="spinner" id="spinner" width="500" height="500"></canvas>
       <img src="src/assets/dolphin2.png" alt="dolphin" class="dolphin">
@@ -25,6 +26,16 @@
       </form>
       <div class="names"></div>
       <div class="winner"></div>
+    </div>
+  </div>
+  <div class="settings-modal">
+    <h2 class="modal-header">Settings</h2>
+    <div class="modal-section">
+      <p>Show Confetti</p>
+      <label class="toggle">
+        <input type="checkbox" id="settings-confetti">
+        <span class="slider"></span>
+      </label>
     </div>
   </div>
   <script type="text/javascript" src="dist/run.js"></script>

@@ -1,14 +1,21 @@
 class Spinner {
 
-  settings = {};
+  // todo: link this to index.html
+  static CANVAS_SIZE = 500;
+
+  settings = {
+    showConfetti: true,
+  };
   spinnerEl;
   spinnerCanvas;
   spinnerContext;
+  settingsModalEl;
   names = [];
   namesEl;
   addButtonEl;
   clearButtonEl;
   spinButtonEl;
+  confettiSettingsToggle;
   inputEl;
   winnerEl;
   selectedName;
@@ -34,10 +41,13 @@ class Spinner {
     this.spinnerCanvas = document.getElementById("spinner");
     this.spinnerContext = this.spinnerCanvas.getContext("2d");
     this.spinnerEl = document.querySelector('.spinner');
+    this.settingsButtonEl = document.querySelector('.settings');
+    this.settingsButtonEl.addEventListener("click", this.showSettings.bind(this));
+    this.settingsModalEl = document.querySelector('.settings-modal');
     this.namesEl = document.querySelector('.names');
     this.inputEl = document.querySelector('.name-input');
     this.winnerEl = document.querySelector('.winner');
-    this.updateNamesDisplay();
+    this.getStoredNames();
     this.addButtonEl = document.querySelector('.add');
     this.addButtonEl.addEventListener("click", this.addName.bind(this));
     this.inputEl.addEventListener("keypress", this.addName.bind(this));
@@ -45,9 +55,54 @@ class Spinner {
     this.clearButtonEl.addEventListener("click", this.clearNames.bind(this));
     this.spinButtonEl = document.querySelector('.spin');
     this.spinButtonEl.addEventListener("click", this.spin.bind(this));
-    this.confettiCanvas = document.getElementById("confetti");
-    this.confettiCanvasCtx = this.confettiCanvas.getContext("2d");
-    this.confetti = this.confettiLib.create(this.confettiCanvas, { resize: true });
+    this.confettiSettingsToggle = document.getElementById('settings-confetti');
+    this.confettiSettingsToggle.addEventListener("click", this.updateConfettiSetting.bind(this));
+    this.checkSettings();
+  }
+
+  getStoredNames() {
+    const storedNames = localStorage.getItem('names');
+    if (storedNames) {
+      this.names = storedNames.split(',');
+      this.updateNamesDisplay();
+    }
+  }
+
+  showSettings() {
+    if (this.settingsModalEl.style.display === "none" || this.settingsModalEl.style.display === "") {
+      this.settingsModalEl.style.display = "block";
+    } else {
+      this.settingsModalEl.style.display = "none"
+    }
+  }
+
+  checkSettings() {
+    this.getConfettiSetting();
+  }
+
+  getConfettiSetting() {
+    this.settings.showConfetti = localStorage.getItem('confetti') === 'true';
+    this.initializeConfettiOrNot();
+  }
+
+  updateConfettiSetting() {
+    this.settings.showConfetti = !this.settings.showConfetti;
+    localStorage.setItem('confetti', this.settings.showConfetti.toString());
+    this.initializeConfettiOrNot();
+  }
+
+  initializeConfettiOrNot() {
+    if (this.settings.showConfetti) {
+      const confettiSettingsToggle = document.getElementById('settings-confetti');
+      confettiSettingsToggle.checked = true;
+      this.confettiCanvas = document.getElementById("confetti");
+      this.confettiCanvasCtx = this.confettiCanvas.getContext("2d");
+      this.confetti = this.confettiLib.create(this.confettiCanvas, { resize: true });
+    } else {
+      this.confettiCanvas = null;
+      this.confettiCanvasCtx = null;
+      this.confetti = null;
+    }
   }
 
   updateNamesDisplay() {
@@ -65,6 +120,7 @@ class Spinner {
     })
     this.namesEl.replaceChildren(...namesArr);
     this.addNameDeleteButtons();
+    this.updateSpinner();
   }
 
   addName(event) {
@@ -74,7 +130,7 @@ class Spinner {
       this.names.push(document.getElementById('name-input').value);
       this.updateNamesDisplay();
       form.reset();
-      this.updateSpinner();
+      this.updateNamesStorage();
     }
   }
 
@@ -96,30 +152,19 @@ class Spinner {
   deleteName(deletedName) {
     this.names = this.names.filter((name) => name !== deletedName);
     this.updateNamesDisplay();
-    this.updateSpinner();
+    this.updateNamesStorage();
   }
 
   clearNames() {
     this.names = [];
     this.winnerEl.textContent = '';
     this.updateNamesDisplay();
-    this.updateSpinner();
+    this.updateNamesStorage();
   }
 
   // todo: allow name editing instead of requiring the name to be deleted and re-added in case of typos
   updateName(idx, updatedName) {
     this.names[idx] = updatedName;
-  }
-
-  reassignMike() {
-    let newMike = this.names[this.getRandomNumber(this.names.length)];
-    this.names.forEach((name, nameIdx) => {
-      if (name.toLowerCase() === 'mike') {
-        this.names[nameIdx] = newMike;
-      }
-    })
-    this.updateNamesDisplay();
-    this.updateSpinner();
   }
 
   spin() {
@@ -136,7 +181,9 @@ class Spinner {
         this.spinnerEl.style.transform = (`rotate(${wedgeAngle * randomNum}deg)`);
         let winnerTxt = document.createTextNode(this.selectedName);
         this.winnerEl.appendChild(winnerTxt);
-        this.confetti();
+        if (this.settings.showConfetti) {
+          this.confetti();
+        }
       }, 1000);
     } else {
       this.errorMsg = 'Error: Add names to spin!';
@@ -149,37 +196,42 @@ class Spinner {
     this.spinnerContext.clearRect(0, 0, this.spinnerCanvas.width, this.spinnerCanvas.height);
     for (let i = 0; i < this.names.length; i++) {
       let strokeColor = this.palette[this.getRandomNumber(4)];
-      this.drawWedgeLines(250, 250, 250, i * (360 / this.names.length), strokeColor);
-      this.drawNamesOnCanvas(250, 250, 200, i * (360 / this.names.length) + ((360 / this.names.length) / 2), strokeColor, this.names[i]);
+      this.drawWedgeLines(i * (360 / this.names.length), strokeColor);
+      this.drawNamesOnCanvas(i * (360 / this.names.length) + ((360 / this.names.length) / 2), strokeColor, this.names[i]);
     }
   }
 
-  drawWedgeLines(x, y, length, angle, color) {
+  drawWedgeLines(angle, color) {
     let radians = angle / 180 * Math.PI;
-    let endX = x + length * Math.cos(radians);
-    let endY = y - length * Math.sin(radians);
+    let x = (Spinner.CANVAS_SIZE / 2) + (Spinner.CANVAS_SIZE / 2) * Math.cos(radians);
+    let y = (Spinner.CANVAS_SIZE / 2) - (Spinner.CANVAS_SIZE / 2) * Math.sin(radians);
     this.spinnerContext.save();
     this.spinnerContext.lineWidth = 3;
     this.spinnerContext.strokeStyle = color;
     this.spinnerContext.beginPath();
-    this.spinnerContext.moveTo(x, y)
-    this.spinnerContext.lineTo(endX, endY);
+    this.spinnerContext.moveTo(Spinner.CANVAS_SIZE / 2, Spinner.CANVAS_SIZE / 2)
+    this.spinnerContext.lineTo(x, y);
     this.spinnerContext.closePath();
     this.spinnerContext.stroke();
   }
 
-  drawNamesOnCanvas(x, y, length, angle, color, name) {
+  // todo: I think if I rotate the canvas as I draw the names and then reset after drawing each one, they will angle out instead of being horizontal
+  drawNamesOnCanvas(angle, color, name) {
     let radians = angle / 180 * Math.PI;
-    let endX = x + length * Math.cos(radians);
-    let endY = y - length * Math.sin(radians);
+    let x = (Spinner.CANVAS_SIZE / 2) + 100 * Math.cos(radians);
+    let y = (Spinner.CANVAS_SIZE / 2) - 100 * Math.sin(radians);
     this.spinnerContext.save();
     this.spinnerContext.fillStyle = color;
     this.spinnerContext.font = "16px sans-serif";
-    this.spinnerContext.fillText(name, endX, endY);
+    this.spinnerContext.fillText(name, x, y);
   }
 
   getRandomNumber(max) {
     return Math.floor(Math.random() * max);
+  }
+
+  updateNamesStorage() {
+    localStorage.setItem("names", this.names.toString());
   }
 }
 
