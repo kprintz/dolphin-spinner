@@ -116,6 +116,20 @@
     transition: all 3s;
 }
 
+.settings {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    height: 40px;
+    width: 40px;
+    border: none;
+    border-radius: 50%;
+    background-image: url(src/assets/settings.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    cursor: pointer;
+}
+
 .rotate {
     animation: spin 500ms infinite linear;
 }

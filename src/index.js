@@ -37,7 +37,7 @@ class Spinner {
     this.namesEl = document.querySelector('.names');
     this.inputEl = document.querySelector('.name-input');
     this.winnerEl = document.querySelector('.winner');
-    this.updateNamesDisplay();
+    this.getStoredNames();
     this.addButtonEl = document.querySelector('.add');
     this.addButtonEl.addEventListener("click", this.addName.bind(this));
     this.inputEl.addEventListener("keypress", this.addName.bind(this));
@@ -48,6 +48,14 @@ class Spinner {
     this.confettiCanvas = document.getElementById("confetti");
     this.confettiCanvasCtx = this.confettiCanvas.getContext("2d");
     this.confetti = this.confettiLib.create(this.confettiCanvas, { resize: true });
+  }
+
+  getStoredNames() {
+    const storedNames = localStorage.getItem('names');
+    if (storedNames) {
+      this.names = storedNames.split(',');
+      this.updateNamesDisplay();
+    }
   }
 
   updateNamesDisplay() {
@@ -65,6 +73,7 @@ class Spinner {
     })
     this.namesEl.replaceChildren(...namesArr);
     this.addNameDeleteButtons();
+    this.updateSpinner();
   }
 
   addName(event) {
@@ -74,7 +83,7 @@ class Spinner {
       this.names.push(document.getElementById('name-input').value);
       this.updateNamesDisplay();
       form.reset();
-      this.updateSpinner();
+      this.updateNamesStorage();
     }
   }
 
@@ -96,30 +105,19 @@ class Spinner {
   deleteName(deletedName) {
     this.names = this.names.filter((name) => name !== deletedName);
     this.updateNamesDisplay();
-    this.updateSpinner();
+    this.updateNamesStorage();
   }
 
   clearNames() {
     this.names = [];
     this.winnerEl.textContent = '';
     this.updateNamesDisplay();
-    this.updateSpinner();
+    this.updateNamesStorage();
   }
 
   // todo: allow name editing instead of requiring the name to be deleted and re-added in case of typos
   updateName(idx, updatedName) {
     this.names[idx] = updatedName;
-  }
-
-  reassignMike() {
-    let newMike = this.names[this.getRandomNumber(this.names.length)];
-    this.names.forEach((name, nameIdx) => {
-      if (name.toLowerCase() === 'mike') {
-        this.names[nameIdx] = newMike;
-      }
-    })
-    this.updateNamesDisplay();
-    this.updateSpinner();
   }
 
   spin() {
@@ -180,6 +178,10 @@ class Spinner {
 
   getRandomNumber(max) {
     return Math.floor(Math.random() * max);
+  }
+
+  updateNamesStorage() {
+    localStorage.setItem("names", this.names.toString());
   }
 }
 
