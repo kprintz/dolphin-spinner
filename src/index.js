@@ -1,14 +1,18 @@
 class Spinner {
 
-  settings = {};
+  settings = {
+    showConfetti: true,
+  };
   spinnerEl;
   spinnerCanvas;
   spinnerContext;
+  settingsModalEl;
   names = [];
   namesEl;
   addButtonEl;
   clearButtonEl;
   spinButtonEl;
+  confettiSettingsToggle;
   inputEl;
   winnerEl;
   selectedName;
@@ -34,6 +38,9 @@ class Spinner {
     this.spinnerCanvas = document.getElementById("spinner");
     this.spinnerContext = this.spinnerCanvas.getContext("2d");
     this.spinnerEl = document.querySelector('.spinner');
+    this.settingsButtonEl = document.querySelector('.settings');
+    this.settingsButtonEl.addEventListener("click", this.showSettings.bind(this));
+    this.settingsModalEl = document.querySelector('.settings-modal');
     this.namesEl = document.querySelector('.names');
     this.inputEl = document.querySelector('.name-input');
     this.winnerEl = document.querySelector('.winner');
@@ -45,9 +52,9 @@ class Spinner {
     this.clearButtonEl.addEventListener("click", this.clearNames.bind(this));
     this.spinButtonEl = document.querySelector('.spin');
     this.spinButtonEl.addEventListener("click", this.spin.bind(this));
-    this.confettiCanvas = document.getElementById("confetti");
-    this.confettiCanvasCtx = this.confettiCanvas.getContext("2d");
-    this.confetti = this.confettiLib.create(this.confettiCanvas, { resize: true });
+    this.confettiSettingsToggle = document.getElementById('settings-confetti');
+    this.confettiSettingsToggle.addEventListener("click", this.updateConfettiSetting.bind(this));
+    this.checkSettings();
   }
 
   getStoredNames() {
@@ -55,6 +62,43 @@ class Spinner {
     if (storedNames) {
       this.names = storedNames.split(',');
       this.updateNamesDisplay();
+    }
+  }
+
+  showSettings() {
+    if (this.settingsModalEl.style.display === "none" || this.settingsModalEl.style.display === "") {
+      this.settingsModalEl.style.display = "block";
+    } else {
+      this.settingsModalEl.style.display = "none"
+    }
+  }
+
+  checkSettings() {
+    this.getConfettiSetting();
+  }
+
+  getConfettiSetting() {
+    this.settings.showConfetti = localStorage.getItem('confetti') === 'true';
+    this.initializeConfettiOrNot();
+  }
+
+  updateConfettiSetting() {
+    this.settings.showConfetti = !this.settings.showConfetti;
+    localStorage.setItem('confetti', this.settings.showConfetti.toString());
+    this.initializeConfettiOrNot();
+  }
+
+  initializeConfettiOrNot() {
+    if (this.settings.showConfetti) {
+      const confettiSettingsToggle = document.getElementById('settings-confetti');
+      confettiSettingsToggle.checked = true;
+      this.confettiCanvas = document.getElementById("confetti");
+      this.confettiCanvasCtx = this.confettiCanvas.getContext("2d");
+      this.confetti = this.confettiLib.create(this.confettiCanvas, { resize: true });
+    } else {
+      this.confettiCanvas = null;
+      this.confettiCanvasCtx = null;
+      this.confetti = null;
     }
   }
 
@@ -134,7 +178,9 @@ class Spinner {
         this.spinnerEl.style.transform = (`rotate(${wedgeAngle * randomNum}deg)`);
         let winnerTxt = document.createTextNode(this.selectedName);
         this.winnerEl.appendChild(winnerTxt);
-        this.confetti();
+        if (this.settings.showConfetti) {
+          this.confetti();
+        }
       }, 1000);
     } else {
       this.errorMsg = 'Error: Add names to spin!';
